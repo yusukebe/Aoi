@@ -1,0 +1,156 @@
+@import "compass";
+
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+  font-family: 'Roboto', sans-serif !important;
+  letter-spacing: normal;
+}
+.container a{
+  color:#4078c0;
+}
+header {
+  background-color:shade(#003580, 10%);
+  padding:10px 40px;
+  margin-bottom:40px;
+  h1 {
+    margin:0;
+  }
+  a {
+    @include link-colors(#fff);
+    text-decoration:none;
+    &:hover {
+      text-decoration:underline;
+    }
+  }
+  nav {
+    margin-top:10px;
+    ul {
+      font-weight:normal;
+      @include inline-list();
+      li {
+        margin-right:2em;
+      }
+    }
+  }
+}
+
+h2 {
+  margin-top:0;
+}
+
+#editor-tab {
+  border-bottom:1px solid #ddd;
+  margin-bottom:2em;
+  a {
+    cursor: pointer;
+  }
+  ul {
+    li {
+      .pure-menu-link {
+      }
+    }
+  }
+}
+#editor {
+  input[type="text"] {
+    margin-bottom:1em;
+  }
+  textarea {
+    height:30em;
+  }
+}
+#preview {
+  display:none;
+}
+#preview, #permalink {
+  letter-spacing: normal;
+  @include border-radius(3px);
+  border: 1px solid #ddd;
+  padding: 30px 30px 40px 30px;
+  margin-bottom:20px;
+  h2 {
+    border-bottom: 1px solid #eee;
+    font-size: 2.25em;
+    line-height: 1.2;
+    padding-bottom: 0.3em;
+  }
+}
+
+#entry-meta {
+  margin:20px 0;
+  p {
+    margin:0 5px 0 10px;
+  }
+}
+.entries h3 {
+  margin:0 0 10px 0;
+}
+.entries p {
+  max-width:800px !important;
+  margin:5px 5px 0;
+}
+.entries div {
+  margin:0 30px 0 0;
+}
+.pretty-date {
+  color:#666;
+  font-size:14px;
+}
+.entries > a {
+  display:block;
+  margin:0;
+  padding:30px 20px;
+  border-bottom:1px solid #ddd;
+}
+.entries > a:hover {
+  background-color:#eee;
+}
+.entries > a:link, .entries > a:visited, .entries > a:hover {
+  color:#000;
+  text-decoration:none;
+}
+.container {
+  max-width:980px;
+  margin:0 auto;
+}
+footer {
+  margin:50px 0;
+}
+.ellipsis {
+  @include ellipsis();
+}
+.left {
+  @include float('left');
+}
+.right {
+  @include float('right');
+}
+.clearfix {
+  @include clearfix();
+}
+#login {
+  margin-top:20%;
+  button {
+    width:30em;
+  }
+}
+#search-form {
+  display:block;
+  margin-bottom:2em;
+  input[type='text'] {
+    width:80%;
+  }
+  button {
+    width:18%;
+  }
+}
+.pager {
+  margin:20px 0;
+  text-align:center;
+  a {
+    width:10em;
+  }
+}
+.text-center {
+  text-align:center;
+}

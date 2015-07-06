@@ -1,0 +1,27 @@
+<div id="entry-meta" class="clearfix">
+  <p class="left">
+    <a href="/user/<%= entry['_source']['user']['login'] %>">
+      <img src="<%= entry['_source']['user']['avatar_url'] %>" class="avatar" width="44" height="44" />
+    </a>
+  </p>
+  <p class="left">
+    by <a href="/user/<%= entry['_source']['user']['login'] %>"><%= entry['_source']['user']['login'] %></a><br />
+    <i class="pretty-date"><%= entry['_source']['time'] %></i>
+  </p>
+<% if (session[:user][:id] == entry['_source']['user']['id']) %>
+  <p class="right">
+    <a class="pure-button" href="/entry/<%= entry['_id'] %>/edit"
+       role="button">&nbsp;Edit&nbsp;</a> &nbsp;
+    <a class="pure-button" href="/entry/<%= entry['_id'] %>/delete"
+       onclick="window.confirm('Do you really delete this entry?')"
+       role="button">&nbsp;Delete&nbsp;</a>
+  </p>
+<% end %>
+</div>
+
+<div id="permalink">
+  <h2><%= h entry['_source']['title'] %></h2>
+  <div class="markdown-body">
+<%= strip_script(entry['_source']['content']) %>
+  </div>
+</div>

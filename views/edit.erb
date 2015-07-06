@@ -1,0 +1,33 @@
+<nav id="editor-tab">
+  <div class="pure-menu pure-menu-horizontal">
+    <a class="pure-menu-heading pure-menu-link">Edit Entry</a>
+    <ul class="pure-menu-list">
+      <li class="pure-menu-item pure-menu-selected"><a class="pure-menu-link">Editor</a></li>
+      <li class="pure-menu-item"><a class="pure-menu-link">Preview</a></li>
+    </ul>
+  </div>
+</nav>
+
+<form class="pure-form" method="post" action="/entry/<%= entry['_id'] %>/edit">
+  <div id="editor">
+    <div>
+      <input class="pure-input-1" type="text" id="editor-title" placeholder="Title"
+             value="<%= h entry['_source']['title'] %>" name="title"/>
+    </div>
+    <br />
+    <div>
+      <textarea id="editor-content" class="pure-input-1" rows="30" name="content">
+<%= strip_script entry['_source']['content'] %>
+      </textarea>
+    </div>
+    <br />
+  </div>
+  <div id="preview">
+    <h2>&nbsp;</h2>
+    <div id="preview-body" class="markdown-body">
+    </div>
+  </div>
+  <p class="text-center">
+    <button class="pure-button pure-button-primary">Save</button>
+  </p>
+</form>

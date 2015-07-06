@@ -1,0 +1,10 @@
+{
+  "project_name" : "Your project name",
+  "client_id" : "Your Github application client_id",
+  "client_secret" : "Your Github application client_secret",
+  "session_secret" : "Session secret passphrase",
+  "index" : "ElasticSearch index name",
+  "members" : [
+     "Github login account names"
+  ]
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title><%= @title %></title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <%= css :application %>
+    <%= js :application %>
+  </head>
+  <body>
+    <header class="clearfix">
+      <h1 class="left"><a href="/"><%= project_name %>::Aoi</a></h1>
+      <nav class="right">
+        <ul>
+          <li><a href="/entry"><i class="fa fa-list"></i>
+              List</a></li>
+          <li><a href="/write"><i class="fa fa-pencil"></i>
+              Write</a></li>
+          <li><a href="/user/<%= session[:user][:name] %>"><i class="fa fa-user"></i>
+              <%= session[:user][:login] %></a></li>
+          <li><a href="/logout">
+              Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="pure-g container">
+      <div class="pure-u-1">
+        <%= yield %>
+      </div>
+      <footer class="pure-u-1">
+        <address>Powered by Aoi - <small>Share and stock our plain/markdown texts</small></address>
+      </footer>
+    </div>
+  </body>
+</html>

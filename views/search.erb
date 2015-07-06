@@ -1,0 +1,27 @@
+<h2>Search Result</h2>
+
+<form id="search-form" class="pure-form" action="/search" method="get">
+  <input type="text" placeholder="Queries" name="q" value="<%= query %>">
+  <button class="pure-button" type="submit"><i class="fa fa-search"></i>
+    Search</button>
+  <p>
+    <i><b><%= total %></b> entry/enties found!</i>
+  </p>
+</form>
+
+<div class="entries">
+<% sources.each do |data| %>
+<% entry = data['_source'] %>
+  <a href="/entry/<%= data['_id'] %>" class="clearfix">
+    <div class="left text-center">
+      <img src="<%= entry['user']['avatar_url'] %>" class="avatar" width="44" height="44" /><br />
+      <%= entry['user']['login'] %>
+    </div>
+    <div class="left">
+      <h3><%= h entry['title'] %></h3>
+      <p class="ellipsis"><%= h entry['content'] %></p>
+      <p><i class="pretty-date"><%= entry['time'] %></i></p>
+    </div>
+  </a>
+<% end %>
+</div>

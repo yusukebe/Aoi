@@ -46,7 +46,7 @@ class Aoi < Sinatra::Base
   end
 
   def es
-    Elasticsearch::Client.new log: true
+    Elasticsearch::Client.new log: false
   end
 
   helpers do
@@ -79,9 +79,8 @@ class Aoi < Sinatra::Base
   end
 
   post '/write' do
-    response = es.index index: settings.index,
-               type: 'entry',
-               body: { title: params['title'], content: params['content'], user: session[:user], time: Time.now.to_i }
+    body = { title: params['title'], content: params['content'], user: session[:user], time: Time.now.to_i }
+    response = es.index index: settings.index, type: 'entry', body: body
     es.indices.refresh index: settings.index
     id = response['_id']
     redirect to ("/entry/#{id}")
@@ -90,19 +89,8 @@ class Aoi < Sinatra::Base
   get '/search' do
     query = params['q']
     redirect to('/entry') if query.empty?
-    begin response = es.search index: settings.index,
-                         type: 'entry',
-                         body: {
-                           query: {
-                             simple_query_string: {
-                               fields: ["_all"],
-                               query: query
-                             }
-                           }
-                         }
-    rescue Elasticsearch::Transport::Transport::Errors::NotFound
-      return erb :search, :locals => { :total => 0, :sources => [], :query => '' }
-    end
+    body = { query: { simple_query_string: { fields: ["content", "title"], query: query } } }
+    response = es.search index: settings.index, type: 'entry', body: body
     total = response['hits']['total']
     sources = response['hits']['hits']
     erb :search, :locals => { :total => total, :sources => sources, :query => query }
@@ -112,15 +100,8 @@ class Aoi < Sinatra::Base
     size = 20
     page = params['page'] || 1;
     from = (page.to_i - 1) * 3
-    begin response = es.search index: settings.index,
-                           type: 'entry',
-                           body: {
-                             size: size,
-                             from: from,
-                             sort: [ { time: 'desc' } ],
-                             query: { match_all: {} }
-                           }
-
+    body = { size: size, from: from, sort: [ { time: 'desc' } ], query: { match_all:{} } }
+    begin response = es.search index: settings.index, type: 'entry', body: body
     rescue Elasticsearch::Transport::Transport::Errors::NotFound
       erb :entries, :locals => { :total => 0, :sources => [], :size => size, :page => page }
     end
@@ -149,13 +130,9 @@ class Aoi < Sinatra::Base
     id = params['id']
     entry = es.get index: settings.index, type: 'entry', id: id
     redirect to('/') unless entry['_source']['user']['id'] == session[:user][:id]
-    response =
-      es.update index: settings.index,
-               type: 'entry',
-               id: id,
-               body: { doc: { title: params['title'], content: params['content'],
-                       user: session[:user], time: entry['_source']['time'] || Time.now.to_i } }
-    es.indices.refresh index: settings.index
+    body = { doc: { title: params['title'], content: params['content'],
+                    user: session[:user], time: entry['_source']['time'] || Time.now.to_i } }
+    response = es.update index: settings.index, type: 'entry', id: id, body: body
     redirect to ("/entry/#{id}")
   end
 
@@ -164,7 +141,6 @@ class Aoi < Sinatra::Base
     entry = es.get index: settings.index, type: 'entry', id: id
     redirect to('/') unless entry['_source']['user']['id'] == session[:user][:id]
     es.delete index: settings.index, type: 'entry', id: id
-    es.indices.refresh index: settings.index
     redirect to('/');
   end
   
@@ -228,5 +204,5 @@ class Aoi < Sinatra::Base
   not_found do
     "The content is not found..."
   end
-  
 end
+

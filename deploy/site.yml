@@ -4,6 +4,7 @@
   tasks:
     - rpm_key: key=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
     - copy: src=files/elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo
+    - command: service elasticsearch restart
     - yum: name="@Development Tools" state=present
     - yum: name=zlib-devel state=present
     - yum: name=patch state=present
@@ -14,6 +15,7 @@
     - git: repo="https://github.com/yusukebe/Aoi.git"
            dest="~/aoi"
            ssh_opts="-o StrictHostKeyChecking=no"
+    - command: bash -lc 'cd ~/aoi && curl -XPOST http://localhost:9200/aoi -d @etc/settings.json'
     - command: bash -lc 'cd ~/aoi && /usr/local/bin/bundle install'
     - copy: src=files/config.json dest="~/aoi/config.json"
     - command: bash -lc "killall unicorn"

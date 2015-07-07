@@ -121,7 +121,7 @@ class Aoi < Sinatra::Base
   get '/entry/:id' do
     id = params['id']
     entry = es.get index: settings.index, type: 'entry', id: id
-    @title = entry['title'] + ' - ' + settings.title
+    @title = entry['_source']['title'] + ' - ' + settings.title
     erb :show, :locals => { :entry => entry }
   end
 

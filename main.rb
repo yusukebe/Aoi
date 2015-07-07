@@ -40,6 +40,7 @@ class Aoi < Sinatra::Base
     ]
     css :application, [
           '/assets/css/github-markdown.css',
+          '/assets/css/pure.css',
           '/assets/css/app.css'
     ]
     js_compression :jsmin

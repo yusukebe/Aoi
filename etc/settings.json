@@ -1,17 +1,29 @@
 {
   "settings" : {
-    "analysis" : {
-      "analyzer" : {
-        "my_ngram_analyzer" : {
-          "tokenizer" : "my_ngram_tokenizer"
+    "analysis": {
+      "filter": {
+        "greek_lowercase_filter": {
+          "type": "lowercase",
+          "language": "greek"
         }
       },
-      "tokenizer" : {
-        "my_ngram_tokenizer" : {
-          "type" : "nGram",
-          "min_gram" : "2",
-          "max_gram" : "3",
-          "token_chars": [ "letter", "digit" ]
+      "tokenizer": {
+        "ngram_tokenizer": {
+          "type": "nGram",
+          "min_gram": "2",
+          "max_gram": "3",
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      },
+      "analyzer": {
+        "ngram_analyzer": {
+          "tokenizer": "ngram_tokenizer",
+          "filter": [
+            "greek_lowercase_filter"
+          ]
         }
       }
     }
@@ -21,11 +33,11 @@
       "properties": {
         "title": {
           "type": "string",
-          "analyzer": "my_ngram_analyzer"
+          "analyzer": "ngram_analyzer"
         },
         "content": {
           "type": "string",
-          "analyzer": "my_ngram_analyzer"
+          "analyzer": "ngram_analyzer"
         },
         "time": {
           "type": "integer"

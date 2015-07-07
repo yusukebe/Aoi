@@ -1,0 +1,23 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - rpm_key: key=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
+    - copy: src=files/elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo
+    - yum: name="@Development Tools" state=present
+    - yum: name=zlib-devel state=present
+    - yum: name=patch state=present
+    - yum: name=elasticsearch state=present
+    - yum: name=git state=present
+    - yum: name=ruby-devel state=present
+    - command: bash -lc "gem install bundler io-console unicorn"
+    - git: repo="https://github.com/yusukebe/Aoi.git"
+           dest="~/aoi"
+           ssh_opts="-o StrictHostKeyChecking=no"
+    - command: bash -lc 'cd ~/aoi && /usr/local/bin/bundle install'
+    - copy: src=files/config.json dest="~/aoi/config.json"
+    - command: bash -lc "killall unicorn"
+    - command: bash -lc "cd ~/aoi && /usr/local/bin/unicorn -o 127.0.0.1 -p 3000 -E production -D"
+    - yum: name=nginx state=present
+    - copy: src=files/nginx.conf dest=/etc/nginx/nginx.conf
+    - command: service nginx restart

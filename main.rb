@@ -20,6 +20,7 @@ class Aoi < Sinatra::Base
     set :project_name, data['project_name'] || ''
     set :index, data['index'] || 'aoi'
     set :members, data['members'] || []
+    set :title, settings.project_name + '::Aoi'
   end
   
   register Sinatra::CompassSupport
@@ -75,6 +76,7 @@ class Aoi < Sinatra::Base
   end
 
   get '/write' do
+    @title = 'Write - ' + settings.title
     erb :write
   end
 
@@ -93,6 +95,7 @@ class Aoi < Sinatra::Base
     response = es.search index: settings.index, type: 'entry', body: body
     total = response['hits']['total']
     sources = response['hits']['hits']
+    @title = 'Search - ' + settings.title
     erb :search, :locals => { :total => total, :sources => sources, :query => query }
   end
   
@@ -101,6 +104,7 @@ class Aoi < Sinatra::Base
     page = params['page'] || 1;
     from = (page.to_i - 1) * 3
     body = { size: size, from: from, sort: [ { time: 'desc' } ], query: { match_all:{} } }
+    @title = 'Entries - ' + settings.title
     begin response = es.search index: settings.index, type: 'entry', body: body
     rescue Elasticsearch::Transport::Transport::Errors::NotFound
       erb :entries, :locals => { :total => 0, :sources => [], :size => size, :page => page }
@@ -116,6 +120,7 @@ class Aoi < Sinatra::Base
   get '/entry/:id' do
     id = params['id']
     entry = es.get index: settings.index, type: 'entry', id: id
+    @title = entry['title'] + ' - ' + settings.title
     erb :show, :locals => { :entry => entry }
   end
 
@@ -123,6 +128,7 @@ class Aoi < Sinatra::Base
     id = params['id']
     entry = es.get index: settings.index, type: 'entry', id: id
     redirect to('/') unless entry['_source']['user']['id'] == session[:user][:id]
+    @title = 'Edit - ' + settings.title
     erb :edit, :locals => { :entry => entry }
   end
   
@@ -145,6 +151,7 @@ class Aoi < Sinatra::Base
   end
   
   get '/login' do
+    @title = 'Login - ' + settings.title
     erb :login, :layout => false
   end
 
@@ -202,7 +209,7 @@ class Aoi < Sinatra::Base
   end
 
   not_found do
-    "The content is not found..."
+    "404 Not Found..."
   end
 end
 
